@@ -1,23 +1,23 @@
-import React, { useState } from "react";
+import React from "react";
 import "./App.css";
 import PayPal from "./components/PayPal";
+import History from "./components/UseHistory";
+import NavBar from "./components/Layouts/Navbar";
+import Top from "./components/Layouts/Top";
+import { Route, Routes } from "react-router-dom";
 
 function App() {
-  const [checkout, setCheckOut] = useState(false);
+  // const [value, setValue] = useState();
 
   return (
-    <div className="App">
-      {checkout ? (
-        <PayPal />
-      ) : (
-        <button
-          onClick={() => {
-            setCheckOut(true);
-          }}
-        >
-          Checkout
-        </button>
-      )}
+    <div>
+      <NavBar />
+      <Routes>
+        <Route exact path="/" element={<Top />} />
+
+        <Route path="/paypal" element={<PayPal />} />
+        <Route path="/history" element={<History />} />
+      </Routes>
     </div>
   );
 }

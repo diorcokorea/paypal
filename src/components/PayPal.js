@@ -1,9 +1,13 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
+import { Radio, Space } from "antd";
+import $ from "jquery";
 
 export default function Paypal() {
   const paypal = useRef();
 
+  const [value, setValue] = useState();
   useEffect(() => {
+    $("#btndv").empty();
     window.paypal
       .Buttons({
         createOrder: (data, actions, err) => {
@@ -11,10 +15,10 @@ export default function Paypal() {
             intent: "CAPTURE",
             purchase_units: [
               {
-                description: "Cool looking table",
+                description: `${value} Coupons`,
                 amount: {
-                  currency_code: "CAD",
-                  value: 650.0,
+                  currency_code: "USD",
+                  value: value,
                 },
               },
             ],
@@ -29,11 +33,21 @@ export default function Paypal() {
         },
       })
       .render(paypal.current);
-  }, []);
-
+  }, [value]);
+  const onChange = (e) => {
+    console.log("radio checked", e.target.value);
+    setValue(e.target.value);
+  };
   return (
     <div>
-      <div ref={paypal}></div>
+      <Radio.Group onChange={onChange} value={value} size="large">
+        <Space direction="vertical">
+          <Radio value={100}> 100</Radio>
+          <Radio value={200}> 200</Radio>
+          <Radio value={1000}>1000</Radio>
+        </Space>
+      </Radio.Group>
+      <div id="btndv" ref={paypal}></div>
     </div>
   );
 }
